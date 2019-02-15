@@ -36,19 +36,42 @@
         }
     ];
 
-    class News extends React.Component {
+    class Article extends React.Component {
         render() {
-            const tmpNews = this.props.data.map(function (item) {
-                return (
-                    <div key={item.id}>
-                        <p className="red">{item.name}</p>
-                        <p className="red">{item.text}</p>
-                    </div>
-                )
-            });
+            const {name, text} = this.props.data;
+            return (<div>
+                <p className="red">{name}</p>
+                <p className="red">{text}</p>
+            </div>)
+        }
+    }
+
+    class News extends React.Component {
+        generateNews = () => {
+            const {data} = this.props;
+            let tempNews;
+
+            if (data.length) {
+                tempNews = data.map(function (item) {
+                    return <Article key={item.id} data={item}/>
+                })
+            } else {
+                tempNews = <p>К сожалению новостей нет!</p>
+            }
+
+            return tempNews;
+        };
+
+        render() {
+            const {data} = this.props;
 
             return (
-                <div>{tmpNews}</div>
+                <div>
+                    {this.generateNews()}
+                    {
+                        data.length ? <strong>Кол-во новостей: {data.length}</strong> : null
+                    }
+                </div>
             )
         }
     }
@@ -66,6 +89,7 @@
     const App = () => {
         return (
             <div>
+                <h3>News</h3>
                 <News data={myNews}/>
                 <Comments/>
             </div>
